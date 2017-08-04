@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1491260182 source:d:\dropbox\exercicios pos\dev sistemas embarcados\facil\atm\main.c
+	<stdio.h>
+	<stdlib.h>
+

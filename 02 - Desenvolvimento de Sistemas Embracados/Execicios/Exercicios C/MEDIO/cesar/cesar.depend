@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1491314778 source:d:\dropbox\exercicios pos\dev sistemas embarcados\medio\cesar\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

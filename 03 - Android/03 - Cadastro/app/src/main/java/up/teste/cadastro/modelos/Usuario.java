@@ -1,8 +1,9 @@
 package up.teste.cadastro.modelos;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
     private String nome;
     private String sobrenome;

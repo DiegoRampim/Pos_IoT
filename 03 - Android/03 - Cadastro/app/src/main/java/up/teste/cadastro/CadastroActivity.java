@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -39,6 +40,8 @@ import java.util.Date;
 
 import up.teste.cadastro.adaptadores.AdaptadorGenero;
 import up.teste.cadastro.fragmentos.DialogoData;
+import up.teste.cadastro.interfaces.SelecaoDataListener;
+import up.teste.cadastro.modelos.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
 
@@ -79,16 +82,23 @@ public class CadastroActivity extends AppCompatActivity {
 
         spinnerGenero.setAdapter(adaptadorGenero);
 
-
         textViewDataNascimento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 DialogoData dialogoData = new DialogoData();
+
+                dialogoData.setSelecaoDataListener(new SelecaoDataListener() {
+                    @Override
+                    public void dataSelecionada(int dia, int mes, int ano) {
+                        textViewDataNascimento.setText(dia + " / " + (mes + 1) + " / " + ano);
+                    }
+                });
+
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 dialogoData.show(fragmentManager, "tag");
             }
-        });
+        });//textViewDataNascimento.setOnClickListener(new View.OnClickListener()
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,11 +123,33 @@ public class CadastroActivity extends AppCompatActivity {
                     startActivityForResult(intent, codigoRequisicaoImagem);
 
                 }
+            }
+        }); //imageView.setOnClickListener(new View.OnClickListener()
 
+        buttonSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO validações
 
+                Usuario usuario = new Usuario();
+
+                usuario.setNome(editTextNome.getText().toString());
+                usuario.setSobrenome(editTextSobrenome.getText().toString());
+                usuario.setDataNascimento(textViewDataNascimento.getText().toString());
+                usuario.setEnderecoImagem(diretorioImagem);
+
+                String genero = generos.get(spinnerGenero.getSelectedItemPosition());
+                usuario.setGenero(genero);
+
+                Intent intent = new Intent();
+                intent.putExtra("usuario", usuario);
+
+                setResult(RESULT_OK, intent);
+
+                finish();
 
             }
-        });
+        });//buttonSalvar.setOnClickListener(new View.OnClickListener()
 
     }
 
@@ -127,14 +159,12 @@ public class CadastroActivity extends AppCompatActivity {
 
         String nomeDoArquivo = "imagem" + complementoNome ;
 
-        File estrutauraImagens = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File estrutauraImagens = Environment.getExternalStoragePublicDirectory(
+                                                                    Environment.DIRECTORY_PICTURES);
 
         try{
-
-
             return File.createTempFile(nomeDoArquivo, ".jpg", estrutauraImagens);
         }catch (Exception e){
-
             Log.v("APP ",e.getLocalizedMessage());
             return null;
         }
@@ -172,7 +202,6 @@ public class CadastroActivity extends AppCompatActivity {
 
         }
     }
-
 
     private void setImagemUsuario(){
 
